@@ -1,0 +1,77 @@
+import tkinter as tk
+from tkinter import ttk, filedialog
+from ttkthemes import ThemedTk
+import pygame
+import os
+
+# Initialize pygame mixer for playing music
+pygame.mixer.init()
+
+# Function to load and play music
+def play_music():
+    global music_file
+    music_file = filedialog.askopenfilename(filetypes=[("Audio Files", "*.mp3;*.wav")])
+    if music_file:
+        pygame.mixer.music.load(music_file)
+        pygame.mixer.music.play()
+        song_title.set(os.path.basename(music_file))
+
+# Function to pause the music
+def pause_music():
+    pygame.mixer.music.pause()
+
+# Function to resume music
+def resume_music():
+    pygame.mixer.music.unpause()
+
+# Function to stop music
+def stop_music():
+    pygame.mixer.music.stop()
+    song_title.set("No song playing")
+
+# Creating a themed GUI window using ThemedTk
+window = ThemedTk(theme="breeze")
+window.title("Stylish Music Player")
+window.geometry("400x300")
+
+# Apply styles to the widgets
+style = ttk.Style()
+style.configure("TButton", font=("Helvetica", 12, "bold"), foreground="#4B4B4B", padding=10)
+style.configure("TLabel", font=("Helvetica", 14), background="#E8E8E8", foreground="#333333")
+
+# Frame for displaying song title
+frame = ttk.Frame(window, relief="ridge", borderwidth=2, padding=10)
+frame.pack(pady=20, padx=20, fill="x")
+
+# Display song title
+song_title = tk.StringVar(value="No song playing")
+song_label = ttk.Label(frame, textvariable=song_title, anchor="center")
+song_label.pack(pady=10)
+
+# Button frame for play, pause, resume, and stop buttons
+button_frame = ttk.Frame(window)
+button_frame.pack(pady=20)
+
+# Play button
+play_button = ttk.Button(button_frame, text="🎵 Play", command=play_music, width=12)
+play_button.grid(row=0, column=0, padx=10, pady=10)
+
+# Pause button
+pause_button = ttk.Button(button_frame, text="⏸ Pause", command=pause_music, width=12)
+pause_button.grid(row=0, column=1, padx=10, pady=10)
+
+# Resume button
+resume_button = ttk.Button(button_frame, text="▶️ Resume", command=resume_music, width=12)
+resume_button.grid(row=1, column=0, padx=10, pady=10)
+
+# Stop button
+stop_button = ttk.Button(button_frame, text="⏹ Stop", command=stop_music, width=12)
+stop_button.grid(row=1, column=1, padx=10, pady=10)
+
+# Background color and main window styles
+window.configure(bg="#E8E8E8")
+frame.configure(style="TFrame")
+button_frame.configure(style="TFrame")
+
+# Start the GUI event loop
+window.mainloop()
